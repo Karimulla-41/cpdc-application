@@ -5,8 +5,6 @@ import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { Sparkles, ShieldCheck } from 'lucide-react';
 
-export const dynamic = 'force-dynamic';
-
 export default function SplashScreen() {
   const router = useRouter();
   const { data: session, status } = useSession();

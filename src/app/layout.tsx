@@ -4,6 +4,8 @@ import './globals.css';
 import { Providers } from '@/components/providers';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 
+export const dynamic = 'force-dynamic';
+
 const sourceSans = Source_Sans_3({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
