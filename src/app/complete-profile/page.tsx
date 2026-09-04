@@ -6,6 +6,8 @@ import { useRouter } from 'next/navigation';
 import { UserCheck, Lock, ArrowRight, ShieldCheck, GraduationCap } from 'lucide-react';
 import { ImagePicker } from '@/components/ImagePicker';
 
+export const dynamic = 'force-dynamic';
+
 export default function CompleteProfilePage() {
   const { data: session, update, status } = useSession();
   const router = useRouter();

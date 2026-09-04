@@ -6,6 +6,8 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { AlertTriangle, Mail, Lock, LogIn, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 
+export const dynamic = 'force-dynamic';
+
 function LoginContent() {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -71,7 +73,7 @@ function LoginContent() {
         </div>
 
         <div>
-          <h1 className="text-2xl font-black text-[#1F2933] tracking-tight">
+          <h1 className="text-2xl font-bold text-[#1F2933] tracking-tight">
             CPDC Portal Login
           </h1>
           <p className="text-[#163A5F] font-extrabold text-xs uppercase tracking-wider mt-0.5">

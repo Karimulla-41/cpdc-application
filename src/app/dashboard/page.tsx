@@ -9,6 +9,8 @@ import { StudentDashboard } from '@/components/StudentDashboard';
 import { ManagementDashboard } from '@/components/ManagementDashboard';
 import { ProfileModal } from '@/components/ProfileModal';
 
+export const dynamic = 'force-dynamic';
+
 export default function DashboardPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
