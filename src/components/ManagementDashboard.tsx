@@ -20,11 +20,13 @@ import {
   Edit,
   Megaphone,
   ExternalLink,
-  UserPlus
+  UserPlus,
+  Sparkles
 } from 'lucide-react';
 import { ODListModal } from './ODListModal';
 import { useLanguage } from '@/lib/i18n';
 import { ImagePicker } from './ImagePicker';
+import { getGreeting, getDailyMotivationQuote } from '@/lib/motivation';
 
 interface EventItem {
   id: string;
@@ -465,24 +467,35 @@ export function ManagementDashboard({ activeTab = 'dashboard', setActiveTab }: M
   const completedEvents = events.filter((e) => e.status === 'COMPLETED');
   const upcomingEvents = events.filter((e) => e.status === 'UPCOMING');
 
+  const greeting = getGreeting();
+  const dailyMotivation = getDailyMotivationQuote();
+
   return (
     <div className="space-y-6 pb-16">
       {/* 1. Glass Header Banner */}
       <div className="glass-header text-white p-6 sm:p-8 rounded-2xl relative overflow-hidden">
         <div className="absolute -right-16 -top-16 w-64 h-64 bg-sky-400/20 rounded-full blur-3xl" />
         <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="space-y-1.5">
+          <div className="space-y-2">
             <div className="flex items-center gap-2">
               <span className="px-2.5 py-0.5 rounded text-[11px] font-bold bg-[#2F6F7E] text-white uppercase tracking-wider shadow-xs">
                 {t('operationsHub')}
               </span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
-              {t('portalTitle')} &bull; {user?.name || 'Staff Coordinator'}
+              {greeting}, {user?.name || 'Staff Coordinator'}! 👋
             </h1>
             <p className="text-slate-200 text-xs sm:text-sm font-normal">
-              {t('eventManagement')} &bull; {t('eventWinners')} &bull; {t('cpdcTeam')}
+              {t('portalTitle')} &bull; {t('eventManagement')} &bull; {t('cpdcTeam')}
             </p>
+
+            {/* Daily Motivational Card */}
+            <div className="pt-1">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-xs text-amber-200 font-medium shadow-xs">
+                <Sparkles className="w-4 h-4 text-[#D4A72C] shrink-0 animate-pulse" />
+                <span>"{dailyMotivation.quote}" &bull; <strong className="text-white font-bold">{dailyMotivation.author}</strong></span>
+              </div>
+            </div>
           </div>
 
           <button
