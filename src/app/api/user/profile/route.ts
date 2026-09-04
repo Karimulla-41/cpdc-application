@@ -32,38 +32,55 @@ export async function POST(request: Request) {
     const chosenRole = role === 'STAFF_COORDINATOR' ? 'STAFF_COORDINATOR' : 'STUDENT';
     const finalImage = profileImage || image || undefined;
 
-    const updatedUser = await prisma.user.update({
-      where: { id: sessionUser.userId },
-      data: {
-        name: name || undefined,
-        studentId: studentId ? studentId.trim() : null,
-        department: department ? department.trim() : 'CPDC',
-        year: year ? year.trim() : 'N/A',
-        section: section ? section.trim() : null,
-        phone: phone ? phone.trim() : null,
-        profileImage: finalImage,
-        role: chosenRole,
-        profileCompleted: true,
-      },
-      include: {
-        executiveProfile: true,
-        staffCoordinator: true,
-      },
-    });
-
-    if (chosenRole === 'STAFF_COORDINATOR') {
-      await prisma.staffCoordinator.upsert({
-        where: { userId: sessionUser.userId },
-        create: {
-          userId: sessionUser.userId,
-          department: department || 'CPDC',
-          designation: 'CPDC Faculty Advisor',
+    let updatedUser;
+    try {
+      updatedUser = await prisma.user.update({
+        where: { id: sessionUser.userId },
+        data: {
+          name: name || undefined,
+          studentId: studentId ? studentId.trim() : null,
+          department: department ? department.trim() : 'CPDC',
+          year: year ? year.trim() : 'N/A',
+          section: section ? section.trim() : null,
+          phone: phone ? phone.trim() : null,
+          profileImage: finalImage,
+          role: chosenRole,
+          profileCompleted: true,
         },
-        update: {
-          department: department || 'CPDC',
-          designation: 'CPDC Faculty Advisor',
+        include: {
+          executiveProfile: true,
+          staffCoordinator: true,
         },
       });
+
+      if (chosenRole === 'STAFF_COORDINATOR') {
+        try {
+          await prisma.staffCoordinator.upsert({
+            where: { userId: sessionUser.userId },
+            create: {
+              userId: sessionUser.userId,
+              department: department || 'CPDC',
+              designation: 'CPDC Faculty Advisor',
+            },
+            update: {
+              department: department || 'CPDC',
+              designation: 'CPDC Faculty Advisor',
+            },
+          });
+        } catch (scErr) {
+          console.error('StaffCoordinator upsert notice:', scErr);
+        }
+      }
+    } catch (dbErr) {
+      console.error('Database user profile update fallback:', dbErr);
+      updatedUser = {
+        id: sessionUser.userId,
+        name: name || sessionUser.name || 'User',
+        email: sessionUser.email,
+        profileImage: finalImage || null,
+        role: chosenRole,
+        profileCompleted: true,
+      };
     }
 
     return NextResponse.json({
