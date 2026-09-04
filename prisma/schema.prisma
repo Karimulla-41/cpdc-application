@@ -1,0 +1,158 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               String            @id @default(cuid())
+  googleId         String?           @unique
+  email            String            @unique
+  name             String
+  profileImage     String?
+  studentId        String?
+  department       String?
+  year             String?
+  section          String?
+  phone            String?
+  role             String            @default("STUDENT")
+  profileCompleted Boolean           @default(false)
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+
+  executiveProfile ExecutiveProfile?
+  staffCoordinator StaffCoordinator?
+  registrations    EventRegistration[]
+  attendances      Attendance[]
+  odListEntries    ODListStudent[]
+
+  @@index([email])
+  @@index([role])
+}
+
+model ExecutiveProfile {
+  id           String   @id @default(cuid())
+  userId       String   @unique
+  designation  String   @default("EXECUTIVE_MEMBER")
+  photo        String?
+  displayOrder Int      @default(0)
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model StaffCoordinator {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  department  String?
+  designation String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Event {
+  id              String   @id @default(cuid())
+  title           String
+  description     String
+  date            String
+  startTime       String
+  endTime         String
+  venue           String
+  posterUrl       String?
+  registrationUrl String?
+  status          String   @default("UPCOMING")
+  createdAt       DateTime @default(now())
+
+  registrations EventRegistration[]
+  attendances   Attendance[]
+  odLists       ODList[]
+  winners       EventWinner[]
+}
+
+model EventWinner {
+  id          String   @id @default(cuid())
+  eventId     String
+  position    String   // e.g. "1ST_PLACE", "2ND_PLACE", "3RD_PLACE"
+  title       String   // e.g. "1st Place - Gold Trophy", "2nd Place - Silver Medal", "3rd Place"
+  winnerName  String
+  studentId   String?
+  department  String?
+  photoUrl    String?
+  prize       String?
+  createdAt   DateTime @default(now())
+
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+}
+
+model EventRegistration {
+  id           String   @id @default(cuid())
+  eventId      String
+  userId       String
+  registeredAt DateTime @default(now())
+
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, userId])
+}
+
+model Attendance {
+  id        String   @id @default(cuid())
+  eventId   String
+  userId    String
+  status    String   @default("PRESENT")
+  createdAt DateTime @default(now())
+
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, userId])
+}
+
+model Announcement {
+  id        String   @id @default(cuid())
+  title     String
+  content   String
+  imageUrl  String?
+  priority  String   @default("MEDIUM")
+  createdAt DateTime @default(now())
+}
+
+model CpdcUpdate {
+  id        String   @id @default(cuid())
+  title     String
+  content   String
+  category  String   @default("General")
+  createdAt DateTime @default(now())
+}
+
+model ODList {
+  id             String   @id @default(cuid())
+  eventId        String
+  recipientEmail String
+  subject        String
+  status         String   @default("SENT")
+  sentAt         DateTime @default(now())
+  createdAt      DateTime @default(now())
+
+  event    Event           @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  students ODListStudent[]
+}
+
+model ODListStudent {
+  id       String @id @default(cuid())
+  odListId String
+  userId   String
+
+  odList ODList @relation(fields: [odListId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([odListId, userId])
+}
