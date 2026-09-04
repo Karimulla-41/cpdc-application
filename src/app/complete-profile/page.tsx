@@ -68,8 +68,8 @@ export default function CompleteProfilePage() {
       // Update NextAuth session
       await update({ profileCompleted: true, role });
 
-      // Redirect to main dashboard
-      router.replace('/dashboard');
+      // Direct window location redirect to dashboard
+      window.location.href = '/dashboard';
     } catch (err: any) {
       setError(err?.message || 'Something went wrong. Please try again.');
     } finally {

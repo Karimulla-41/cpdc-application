@@ -108,10 +108,11 @@ export const authOptions: NextAuthOptions = {
         }
       }
 
-      if (trigger === 'update' && token.email) {
+      if (trigger === 'update') {
+        token.profileCompleted = true;
         try {
           const dbUser = await prisma.user.findUnique({
-            where: { email: token.email.toLowerCase() },
+            where: { email: token.email?.toLowerCase() || '' },
             include: { executiveProfile: true },
           });
 
