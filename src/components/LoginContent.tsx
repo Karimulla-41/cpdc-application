@@ -17,6 +17,14 @@ export function LoginContent() {
   const [password, setPassword] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
 
+  const [callbackUrl, setCallbackUrl] = useState('http://localhost:3000/api/auth/callback/google');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setCallbackUrl(`${window.location.origin}/api/auth/callback/google`);
+    }
+  }, []);
+
   useEffect(() => {
     if (status === 'authenticated') {
       if (!session?.user?.profileCompleted) {
@@ -81,14 +89,24 @@ export function LoginContent() {
       </div>
 
       {authError && (
-        <div className="p-3.5 rounded-xl bg-amber-50/95 border border-amber-200 text-amber-900 text-xs space-y-1">
+        <div className="p-3.5 rounded-xl bg-amber-50/95 border border-amber-200 text-amber-900 text-xs space-y-2">
           <div className="flex items-center gap-1.5 font-bold text-amber-950">
             <AlertTriangle className="w-4 h-4 text-[#C58A1A] shrink-0" />
             <span>Google OAuth Notice ({authError})</span>
           </div>
-          <p className="text-[11px] text-amber-800">
-            Redirect URI must match: <code className="bg-amber-100 px-1 py-0.5 rounded">http://localhost:3000/api/auth/callback/google</code>
+          <p className="text-[11px] text-amber-800 leading-relaxed">
+            Google OAuth requires adding this exact URL to your Google Cloud Console:
+            <br />
+            <code className="mt-1 inline-block bg-amber-100/80 px-2 py-1 rounded text-[10px] font-mono text-amber-950 font-bold break-all select-all border border-amber-200">
+              {callbackUrl}
+            </code>
           </p>
+          <div className="bg-amber-100/60 p-2.5 rounded-lg border border-amber-200 text-[11px] text-amber-900 font-medium space-y-1">
+            <p className="font-bold text-amber-950">💡 Recommended Instant Login Solution:</p>
+            <p>
+              Use <strong>"Sign In with Email"</strong> below! Simply type your email (e.g. <code className="bg-amber-200/70 px-1 rounded font-mono">staff@dhaanish.in</code> or <code className="bg-amber-200/70 px-1 rounded font-mono">student@dhaanish.in</code>) to sign in directly without Google OAuth.
+            </p>
+          </div>
         </div>
       )}
 
