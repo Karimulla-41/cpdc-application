@@ -80,37 +80,6 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async signIn({ user, account }) {
-      if (account?.provider === 'google' && user.email) {
-        try {
-          const emailLower = user.email.toLowerCase();
-          // Attempt DB sync asynchronously without blocking callback completion
-          prisma.user.findUnique({
-            where: { email: emailLower },
-          }).then((existingUser) => {
-            if (!existingUser) {
-              return prisma.user.create({
-                data: {
-                  email: emailLower,
-                  googleId: user.id,
-                  name: user.name || 'CPDC User',
-                  profileImage: user.image,
-                  role: Role.STUDENT,
-                  profileCompleted: false,
-                },
-              });
-            } else if (!existingUser.googleId) {
-              return prisma.user.update({
-                where: { email: emailLower },
-                data: { googleId: user.id },
-              });
-            }
-          }).catch((err) => {
-            console.error('Non-blocking DB sync error:', err);
-          });
-        } catch (error) {
-          console.error('Google sign-in catch:', error);
-        }
-      }
       return true;
     },
     async jwt({ token, user, trigger }) {
