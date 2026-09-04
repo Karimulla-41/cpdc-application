@@ -84,11 +84,11 @@ export function AcademicSidebar({
 
   return (
     <>
-      {/* Mobile Backdrop overlay to close sidebar when clicking outside */}
+      {/* Transparent overlay to close sidebar when clicking outside without dimming screen */}
       {isOpen && (
         <div
           onClick={onClose}
-          className="fixed inset-0 z-40 bg-slate-900/60 backdrop-blur-xs transition-opacity"
+          className="fixed inset-0 z-40 bg-transparent transition-opacity"
         />
       )}
 
