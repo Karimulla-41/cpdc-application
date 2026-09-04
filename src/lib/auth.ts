@@ -45,21 +45,21 @@ export const authOptions: NextAuthOptions = {
               email: dbUser.email,
               image: dbUser.profileImage,
               role: dbUser.role as Role,
-              profileCompleted: dbUser.profileCompleted,
+              profileCompleted: dbUser.profileCompleted ?? true,
             };
           }
         } catch (err) {
           console.error('Prisma authorize error, using fallback session:', err);
         }
 
-        // Serverless Vercel fallback session so login NEVER fails
+        // Serverless Vercel fallback session so login NEVER forces profile setup repeatedly
         return {
-          id: `usr_${Date.now()}`,
+          id: `usr_${emailLower}`,
           name: emailLower.split('@')[0],
           email: emailLower,
           image: null,
           role: emailLower.includes('staff') ? Role.STAFF_COORDINATOR : Role.STUDENT,
-          profileCompleted: false,
+          profileCompleted: true,
         };
       },
     }),
@@ -85,6 +85,10 @@ export const authOptions: NextAuthOptions = {
     },
     async jwt({ token, user, trigger }) {
       if (user && user.email) {
+        token.id = (user as any).id || token.id || `usr_${user.email}`;
+        token.role = (user as any).role || token.role || Role.STUDENT;
+        token.profileCompleted = (user as any).profileCompleted ?? true;
+
         try {
           const dbUser = await prisma.user.findUnique({
             where: { email: user.email.toLowerCase() },
@@ -94,38 +98,18 @@ export const authOptions: NextAuthOptions = {
           if (dbUser) {
             token.id = dbUser.id;
             token.role = dbUser.role as Role;
-            token.profileCompleted = dbUser.profileCompleted;
+            token.profileCompleted = dbUser.profileCompleted ?? true;
             token.studentId = dbUser.studentId;
             token.department = dbUser.department;
             token.designation = (dbUser.executiveProfile?.designation as ExecutiveDesignation) || null;
-          } else {
-            token.role = (user as any).role || Role.STUDENT;
-            token.profileCompleted = (user as any).profileCompleted ?? false;
           }
         } catch (err) {
-          token.role = (user as any).role || Role.STUDENT;
-          token.profileCompleted = (user as any).profileCompleted ?? false;
+          console.error('JWT fetch notice:', err);
         }
       }
 
       if (trigger === 'update') {
         token.profileCompleted = true;
-        try {
-          const dbUser = await prisma.user.findUnique({
-            where: { email: token.email?.toLowerCase() || '' },
-            include: { executiveProfile: true },
-          });
-
-          if (dbUser) {
-            token.role = dbUser.role as Role;
-            token.profileCompleted = dbUser.profileCompleted;
-            token.studentId = dbUser.studentId;
-            token.department = dbUser.department;
-            token.designation = (dbUser.executiveProfile?.designation as ExecutiveDesignation) || null;
-          }
-        } catch (err) {
-          console.error('JWT update fetch error:', err);
-        }
       }
 
       return token;

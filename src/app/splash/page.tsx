@@ -13,18 +13,14 @@ export default function SplashScreen() {
     // Show splash screen animation for 2.5 seconds before navigating
     const timer = setTimeout(() => {
       if (status === 'authenticated') {
-        if (!session?.user?.profileCompleted) {
-          router.replace('/complete-profile');
-        } else {
-          router.replace('/dashboard');
-        }
-      } else {
+        router.replace('/dashboard');
+      } else if (status === 'unauthenticated') {
         router.replace('/login');
       }
     }, 2500);
 
     return () => clearTimeout(timer);
-  }, [status, session, router]);
+  }, [status, router]);
 
   return (
     <div className="min-h-screen bg-[#163A5F] flex flex-col items-center justify-center text-white px-4 relative overflow-hidden">
