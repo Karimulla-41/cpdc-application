@@ -3,7 +3,7 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
-import { Sparkles, ShieldCheck } from 'lucide-react';
+import { ShieldCheck } from 'lucide-react';
 
 export default function SplashScreen() {
   const router = useRouter();
@@ -71,8 +71,7 @@ export default function SplashScreen() {
         {/* Animated Loading Status */}
         <div className="flex items-center gap-3 bg-black/30 backdrop-blur-md px-6 py-3 rounded-full border border-white/20 shadow-inner">
           <div className="w-4 h-4 border-2 border-[#D4A72C] border-t-transparent rounded-full animate-spin shrink-0" />
-          <span className="text-xs text-slate-100 font-semibold flex items-center gap-1.5">
-            <Sparkles className="w-3.5 h-3.5 text-[#D4A72C]" />
+          <span className="text-xs text-slate-100 font-semibold">
             Initializing CPDC System...
           </span>
         </div>

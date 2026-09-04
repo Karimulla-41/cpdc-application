@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { signIn, useSession } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { AlertTriangle, Mail, Lock, LogIn, Sparkles } from 'lucide-react';
+import { AlertTriangle, Mail, Lock, LogIn } from 'lucide-react';
 import Link from 'next/link';
 
 export function LoginContent() {
@@ -192,16 +192,6 @@ export function LoginContent() {
           </svg>
           <span>Continue with Google</span>
         </button>
-      </div>
-
-      <div className="text-center pt-1">
-        <Link
-          href="/splash"
-          className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-[#163A5F] hover:underline"
-        >
-          <Sparkles className="w-3 h-3 text-[#D4A72C]" />
-          <span>Replay Welcome Splash Screen</span>
-        </Link>
       </div>
     </div>
   );
