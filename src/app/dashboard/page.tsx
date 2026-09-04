@@ -86,6 +86,7 @@ export default function DashboardPage() {
           onOpenProfile={() => setIsProfileModalOpen(true)}
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
+          onSelectTab={setActiveTab}
         />
 
         {/* Main Content View Container */}

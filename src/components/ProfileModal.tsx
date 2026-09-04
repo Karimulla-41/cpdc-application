@@ -125,8 +125,14 @@ export function ProfileModal({ isOpen, onClose }: ProfileModalProps) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
-      <div className="bg-white max-w-2xl w-full rounded-3xl shadow-2xl border border-slate-100 overflow-hidden my-8 transform transition-all">
+    <div
+      onClick={onClose}
+      className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto cursor-pointer"
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="bg-white max-w-2xl w-full rounded-3xl shadow-2xl border border-slate-100 overflow-hidden my-8 transform transition-all cursor-default relative"
+      >
         {/* Header Profile Hero */}
         <div className="bg-gradient-to-r from-[#163A5F] to-[#1F2933] text-white p-6 sm:p-8 flex items-center justify-between relative overflow-hidden">
           <div className="absolute right-0 top-0 w-64 h-64 bg-[#D4A72C]/10 rounded-full blur-3xl" />
@@ -149,10 +155,16 @@ export function ProfileModal({ isOpen, onClose }: ProfileModalProps) {
             </div>
           </div>
           <button
-            onClick={onClose}
-            className="p-2 text-slate-300 hover:text-white rounded-xl transition bg-white/10 hover:bg-white/20"
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              onClose();
+            }}
+            className="p-2 text-slate-300 hover:text-white rounded-xl transition bg-white/10 hover:bg-white/20 z-20 cursor-pointer"
+            title="Close Settings Modal"
           >
-            <X className="w-5 h-5" />
+            <X className="w-5 h-5 text-[#D4A72C]" />
           </button>
         </div>
 
