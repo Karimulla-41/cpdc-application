@@ -181,21 +181,13 @@ export function StudentDashboard({ activeTab = 'all' }: StudentDashboardProps) {
       <div className="glass-header text-white p-6 sm:p-8 rounded-2xl relative overflow-hidden">
         <div className="absolute -right-16 -top-16 w-64 h-64 bg-sky-400/20 rounded-full blur-3xl" />
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="space-y-2">
+          <div className="space-y-1.5">
             <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
               {greeting}, {user?.name || t('student')}! 👋
             </h1>
             <p className="text-slate-200 text-xs sm:text-sm font-normal">
               {t('portalTitle')} &bull; Dhaanish Chennai &bull; {t('careerHub')}
             </p>
-
-            {/* Daily Motivational Card */}
-            <div className="pt-1">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-xs text-amber-200 font-medium shadow-xs">
-                <Sparkles className="w-4 h-4 text-[#D4A72C] shrink-0 animate-pulse" />
-                <span>"{dailyMotivation.quote}" &bull; <strong className="text-white font-bold">{dailyMotivation.author}</strong></span>
-              </div>
-            </div>
           </div>
 
           {/* Glass Attendance Widget */}
@@ -210,6 +202,30 @@ export function StudentDashboard({ activeTab = 'all' }: StudentDashboardProps) {
               </p>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* 2. Standalone Separate Daily Motivation Card */}
+      <div className="bg-gradient-to-r from-amber-500/10 via-amber-400/5 to-amber-500/10 border border-[#D4A72C]/40 backdrop-blur-md rounded-2xl p-4 sm:p-5 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex items-start sm:items-center gap-3.5">
+          <div className="w-10 h-10 rounded-xl bg-[#D4A72C]/20 border border-[#D4A72C]/50 text-[#163A5F] flex items-center justify-center shrink-0 shadow-xs">
+            <Sparkles className="w-5 h-5 text-[#C58A1A] animate-pulse" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2 mb-0.5">
+              <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#C58A1A] bg-amber-100/90 px-2 py-0.5 rounded-md border border-amber-200/80">
+                ✨ Daily Motivation
+              </span>
+            </div>
+            <p className="text-xs sm:text-sm font-semibold text-[#1F2933] italic">
+              "{dailyMotivation.quote}"
+            </p>
+          </div>
+        </div>
+        <div className="self-end sm:self-center shrink-0">
+          <span className="text-xs font-extrabold text-[#163A5F] bg-white px-3 py-1.5 rounded-xl border border-[#D9DEE3] shadow-xs">
+            — {dailyMotivation.author}
+          </span>
         </div>
       </div>
 
