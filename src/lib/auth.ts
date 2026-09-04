@@ -72,6 +72,7 @@ export const authOptions: NextAuthOptions = {
         process.env.GOOGLE_CLIENT_SECRET ||
         Buffer.from('R09DU1BYLU9Nak9jRnRHYU90eTFtNExhYXJpaDBjd2laZA==', 'base64').toString('utf-8'),
       allowDangerousEmailAccountLinking: true,
+      checks: ['state'],
     }),
   ],
   session: {
