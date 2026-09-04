@@ -1,0 +1,10 @@
+{
+  "appId": "com.dhaanish.cpdc",
+  "appName": "CPDC Portal",
+  "webDir": "public",
+  "bundledWebRuntime": false,
+  "server": {
+    "url": "https://cpdc-application.vercel.app",
+    "cleartext": true
+  }
+}
