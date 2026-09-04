@@ -21,6 +21,8 @@ const merriweather = Merriweather({
 export const metadata: Metadata = {
   title: 'Career & Professional Development Center | CPDC Portal',
   description: 'Official academic and career development platform empowering students, faculty and leadership.',
+  manifest: '/manifest.json',
+  themeColor: '#163A5F',
   icons: {
     icon: '/logo.png',
     shortcut: '/logo.png',

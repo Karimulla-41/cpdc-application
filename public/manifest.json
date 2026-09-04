@@ -1,0 +1,23 @@
+{
+  "name": "CPDC Portal - Dhaanish Chennai",
+  "short_name": "CPDC Portal",
+  "description": "Official Academic & Career Development Platform",
+  "start_url": "/splash",
+  "display": "standalone",
+  "background_color": "#163A5F",
+  "theme_color": "#163A5F",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
